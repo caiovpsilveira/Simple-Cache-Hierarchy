@@ -64,7 +64,7 @@ where the following inputs, outputs and components are responsible for:
 
 # Cache controller state machine
 
-The cache controller was modelled by a Mealy state machine. The controller states are:
+The cache controller was modelled by a Mealy state machine, based on the proposed state machine in Computer Organization and Design: the hardware/software interface 5. ed. The controller states are:
 
 **IDLE**: the cache is in an IDLE state, waiting for the up hierarchy to request some operation.
 
