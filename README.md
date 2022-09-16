@@ -191,10 +191,10 @@ L2 content at way 0 and way 1:
 We can see that all tests worked as expected. There are a few more tests on the testbench at "testbench_hierarchy.v".
 
 ## Final Thoughts
-Looking back, I could've utilized the "dirty_lower_lru_way, "tag_lower_lru_way" and "block_lower_lru_way" as a writeback buffer. When I came up with those registers I was thinking of saving one cycle by storing the writeback contents on them, instead of requiring another cycle to fetch the data of the lower lru way again. By having a writeback buffer, the cache could fill the requested block first, and provide the requested data from the processor earlier, and writeback later.
+Looking back, I could've utilized the "dirty_lower_lru_way, "tag_lower_lru_way" and "block_lower_lru_way" as a writeback buffer. When I came up with those registers I was thinking of saving one cycle by storing the writeback contents on them, instead of requiring another cycle to fetch the data of the lower lru way again. By having a writeback buffer, the cache could fill the requested block first, and provide the requested data from the processor earlier, and writeback later. This would change the state machine transitions.
 
 The "accessed_way" register is probably not needed, as I could reutilize the way offset register to address the accessed_way, to update the LRU and valid at the end of the request.
 
 This cache currently blocks the processor from doing any other instruction, as it requires the we, addr and din signals to be maintained trought the whole request. By utilizing some registers or even a FIFO, the cache could store the request, freeing the processor (non-blocking cache).
 
-The cache could also be optmized by separating each way in a different ram bank. This would require only one cycle to check the blocks, instead of 2. This modification would require one more comparator to the hit, and the cache ram control signals would be split into w0_we, w0_addr, w0_din, w1_we, w1_addr, w1_din, etc.
+The cache could also be optmized by separating each way in a different ram bank. This would require only one cycle to check the blocks, instead of 2. This modification would require one more comparator to the hit, and the cache ram control signals would be split into w0_we, w0_addr, w0_din, w1_we, w1_addr, w1_din, etc. The way offset counter would not be needed.
