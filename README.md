@@ -192,7 +192,7 @@ We can see that all tests worked as expected. There are a few more tests on the 
 
 ## Final Thoughts
 
-This implementation has a latency of a minimum of 2 cycles, when the requested block is in the way 0. This most certainly could be improved to 1 cycle. Setting the cache ram's clock to the inverted clock makes the implementation easier, as the ram can perform the operation sent by the controller on the same cycle.
+This implementation has a latency of a minimum of 2 cycles, when the requested block is in the way 0. This most certainly could be improved to 1 cycle. Setting the cache ram's clock to the inverted clock makes the implementation easier, as the ram can perform the operation sent by the controller on the same cycle. The state machine could also be improved by adding more stages to support some kind of pipeline, to improve the access time.
 
 Looking back, I could've utilized the "dirty_lower_lru_way, "tag_lower_lru_way" and "block_lower_lru_way" as a writeback buffer. When I came up with those registers I was thinking of saving one cycle by storing the writeback contents on them, instead of requiring another cycle to fetch the data of the lower lru way again. By having a writeback buffer, the cache could fill the requested block first, and provide the requested data from the processor earlier, and writeback later. This would change the state machine transitions.
 
