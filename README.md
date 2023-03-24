@@ -122,8 +122,8 @@ After 8 cycles, the expected output should be u_ready = 1 and u_dout = 8'h40, la
 
 Since the tag is now 010 for L1 and 01 for L2, the first 4 bits of L1 will be 0010 (2) and the first 3 bits of L2 will be 001 (1). The block contents of L1 and L2 should be
 
-L1[000]:  LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 2x0_43_42_FF_40\
-L2[0000]: LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 1x0_43_42_41_40
+L1[000]:  LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 0x2_43_42_41_40\
+L2[0000]: LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 0x1_43_42_41_40
 
 ![test2_out_signal](https://user-images.githubusercontent.com/86082269/189259844-44934fc5-8950-4484-bc75-ec82c40aef99.png)
 
@@ -145,8 +145,8 @@ After 2 cycles, the output u_ready should be 1 (u_dout doesn't matter as it is a
 
 Since the way 1 at L1 was modified, it's first 4 bits should be 1010 (A), and have the written data on block offset 01. The L2 cache should not have changed, as it was a hit on L1. The block contetnts on L1 and L2 should be:
 
-L1[000]:  LRU 10 : WAY0: 0x0_03_02_01_00, WAY1(D): Ax0_43_42_FF_40\
-L2[0000]: LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 1x0_43_42_41_40
+L1[000]:  LRU 10 : WAY0: 0x0_03_02_01_00, WAY1(D): 0xA_43_42_FF_40\
+L2[0000]: LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 0x1_43_42_41_40
 
 ![test3_out_signal](https://user-images.githubusercontent.com/86082269/189262450-f8b4c39f-566f-4644-86fc-53b50eff39cf.png)
 
@@ -164,7 +164,7 @@ considering an empty cache that receives WRITE 0000_0000 11111111, WRITE 0100_00
 
 The state of the cache should be:
 L1[000]: LRU 01 : WAY0(D): 0x8_03_02_01_FF, WAY1(D): 0xC_43_42_41_FF\
-L2[0000]: LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 1x0_43_42_41_40
+L2[0000]: LRU 10 : WAY0: 0x0_03_02_01_00, WAY1: 0x1_43_42_41_40
 
 Now following by a READ 1000_0010 request
 since L1 does not contain the block, it will replace the way 1, as it has the LRU = 0. Since this way is modified, it will first writeback to L2. L2 will allocate way 0 to receive the writeback, as it has the LRU = 0. This test show the non inclusive non-exclusive policy, as L1 will contain address 0000_0000, and L2 won't. The writeback operation will make L2 change it's LRU to 01. After the writeback, the L1 will request the block of 1000_0010, placing it on way 1, and L2 will request the block 1000_0010, placing it on way 1. The transitions of the state machines should be
@@ -176,7 +176,7 @@ requiring 12 clock cycles to have the data, which last for 1 cycle (13 cycles to
 The block content of L1 and L2 after the request should be
 
 L1[000]: LRU 10: WAY0(D): 0x8_03_02_01_FF, WAY1: 0x4_83_82_81_80\
-L2[0000]: LRU 10: WAY0: 0x2_83_82_81_80, WAY1(D): 1x5_43_42_41_FF
+L2[0000]: LRU 10: WAY0: 0x2_83_82_81_80, WAY1(D): 05_43_42_41_FF
 
 ![test4_out_signal](https://user-images.githubusercontent.com/86082269/189269476-13f85d61-f5d5-4be4-9271-2a5d5175c9a7.png)
 
